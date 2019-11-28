@@ -1,16 +1,14 @@
 package com.jredfox.upnp;
 
-import com.jredfox.upnp.eventhandler.client.GuiEvent;
 import com.jredfox.upnp.proxy.ServerProxy;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = PortForwardMod.MODID, version = PortForwardMod.VERSION)
 public class PortForwardMod
@@ -22,10 +20,15 @@ public class PortForwardMod
     public static ServerProxy proxy;
     
     @EventHandler
+    public void preinit(FMLPreInitializationEvent event)
+    {
+    	ConfigPortforward.load(event);
+    }
+    
+    @EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	FMLCommonHandler.instance().bus().register(new GuiEvent());
-    	MinecraftForge.EVENT_BUS.register(new GuiEvent());
+    	proxy.init();
     }
     
     @EventHandler

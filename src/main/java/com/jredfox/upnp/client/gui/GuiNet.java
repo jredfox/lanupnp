@@ -2,6 +2,7 @@ package com.jredfox.upnp.client.gui;
 
 import java.io.IOException;
 
+import com.jredfox.upnp.ConfigPortforward;
 import com.jredfox.upnp.PortMappings;
 
 import net.minecraft.client.gui.GuiButton;
@@ -76,7 +77,10 @@ public class GuiNet extends GuiShareToLan {
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
            boolean opened = PortMappings.openLan(this.port,GameType.getByName(getGameMode()), getCheats());
-           opened = PortMappings.addMapping(this.port);
+           if(ConfigPortforward.openToInternet)
+           {
+        	   opened = PortMappings.addMapping(this.port);
+           }
            IChatComponent itextcomponent = opened ? new ChatComponentTranslation("commands.publish.started", new Object[] {"" + this.port}) : new ChatComponentText("commands.publish.failed");
            this.mc.ingameGUI.getChatGUI().printChatMessage(itextcomponent);
 	   }

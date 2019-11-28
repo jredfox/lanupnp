@@ -18,4 +18,9 @@ public class ServerProxy {
     	int port = DedicatedServer.getServer().getPort();
     	System.out.println("closed:" + PortMappings.removeMapping(port) + "\t port:" + port);
 	}
+
+	public void init() 
+	{
+		
+	}
 }

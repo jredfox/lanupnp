@@ -38,7 +38,7 @@ public class PortMappings {
 		for(int i : ports)
 		{
 			UPnP.closePortTCP((Integer)i);
-			System.out.println("closed" + i);
+			System.out.println("closed port:" + i);
 		}
 		ports.clear();
 	}
