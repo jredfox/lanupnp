@@ -100,8 +100,7 @@ public class GuiLan extends GuiScreen
             
             if(ConfigPortforward.openToInternet)
             {
-            	boolean ported = PortMappings.addMapping(port);
-            	System.out.println("port opened on:" + port + "\t" + ported);
+            	PortMappings.addScheduledMapping(port);
             }
         }
     }

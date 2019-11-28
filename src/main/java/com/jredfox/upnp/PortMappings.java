@@ -10,18 +10,25 @@ import com.dosse.upnp.UPnP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ThreadLanServerPing;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.HttpUtil;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
+import net.minecraftforge.common.MinecraftForge;
 
 public class PortMappings {
 	
 	public static final List<Integer> ports = new ArrayList();
+	public static final String portDisplay = "Minecraft-" + MinecraftForge.MC_VERSION;
 	
 	public static boolean addMapping(int port)
 	{
-		boolean opened = UPnP.openPortTCP(port);
+		boolean opened = UPnP.openPortTCP(port, portDisplay);
 		if(opened)
+		{
 			ports.add((Integer)port);
+		}
 		return opened;
 	}
 	
@@ -38,9 +45,25 @@ public class PortMappings {
 		for(int i : ports)
 		{
 			UPnP.closePortTCP((Integer)i);
-			System.out.println("closed port:" + i);
 		}
 		ports.clear();
+	}
+	
+	public static void addScheduledMapping(final int port)
+	{
+		Thread thread = new Thread(
+		new Runnable() { 
+		@Override
+		public void run() 
+		{ 
+		   long time = System.currentTimeMillis();
+		   boolean opened = addMapping(port);
+		   if(Minecraft.getMinecraft().ingameGUI != null)
+			   Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage((IChatComponent)new ChatComponentText( (opened ? EnumChatFormatting.AQUA : EnumChatFormatting.RED) + (opened ? "port opened" : "port failed to open")));
+		 }
+		});
+		
+		thread.start();
 	}
 	
     /**
@@ -68,17 +91,17 @@ public class PortMappings {
     
 	public static int getRndPort()
 	{
-        int i = 25564;
+        int port = 25564;
 
         try
         {
-            i = HttpUtil.func_76181_a();
+            port = HttpUtil.func_76181_a();
         }
         catch (IOException ioexception)
         {
             ;
         }
-        return i;
+        return port;
 	}
 
 }

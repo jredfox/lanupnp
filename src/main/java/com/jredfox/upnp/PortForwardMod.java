@@ -10,11 +10,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = PortForwardMod.MODID, version = PortForwardMod.VERSION)
+@Mod(modid = PortForwardMod.MODID, version = PortForwardMod.VERSION, name = PortForwardMod.NAME)
 public class PortForwardMod
 {
     public static final String MODID = "lanupnp";
-    public static final String VERSION = "1.0";
+    public static final String NAME = "Lan UPNP";
+    public static final String VERSION = "0.8";
    
     @SidedProxy(serverSide = "com.jredfox.upnp.proxy.ServerProxy", clientSide = "com.jredfox.upnp.proxy.ClientProxy")
     public static ServerProxy proxy;

@@ -77,12 +77,12 @@ public class GuiNet extends GuiShareToLan {
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
            boolean opened = PortMappings.openLan(this.port,GameType.getByName(getGameMode()), getCheats());
-           if(ConfigPortforward.openToInternet)
-           {
-        	   opened = PortMappings.addMapping(this.port);
-           }
            IChatComponent itextcomponent = opened ? new ChatComponentTranslation("commands.publish.started", new Object[] {"" + this.port}) : new ChatComponentText("commands.publish.failed");
            this.mc.ingameGUI.getChatGUI().printChatMessage(itextcomponent);
+           if(ConfigPortforward.openToInternet)
+           {
+        	   PortMappings.addScheduledMapping(this.port);
+           }
 	   }
 	   else
 	   {

@@ -10,6 +10,7 @@ public class ClientProxy extends ServerProxy{
 	@Override
 	public void serverStopping()
 	{
+		System.out.println("Closing Ports....");
 		PortMappings.closePorts();
 	}
 	
