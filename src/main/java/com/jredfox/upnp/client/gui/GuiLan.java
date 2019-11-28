@@ -18,7 +18,6 @@ public class GuiLan extends GuiScreen
     private GuiButton gameMode;
     private String gameType = "survival";
     private boolean allowCheats;
-    private static final String __OBFID = "CL_00000713";
 
     public GuiLan(GuiScreen parent)
     {
