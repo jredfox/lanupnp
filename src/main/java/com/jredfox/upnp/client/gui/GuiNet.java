@@ -22,7 +22,8 @@ public class GuiNet extends GuiShareToLan {
    {
       super(parent);
    }
-
+   
+   @Override
    public void initGui() 
    {
       super.initGui();
@@ -31,19 +32,22 @@ public class GuiNet extends GuiShareToLan {
       this.txtPort.setText("25565");
       port = 25565;
    }
-
+   
+   @Override
    public void updateScreen()
    {
       this.txtPort.updateCursorCounter();
    }
-
+   
+   @Override
    public void drawScreen(int par1, int par2, float par3)
    {
       super.drawScreen(par1, par2, par3);
       this.txtPort.drawTextBox();
       this.fontRendererObj.drawString("Open on port: (10000 - 65535)", this.width / 2 - 155, 135, 16777215, false);
    }
-
+   
+   @Override
    protected void keyTyped(char par1, int par2) 
    {
       if(this.txtPort.isFocused()) 
@@ -64,7 +68,7 @@ public class GuiNet extends GuiShareToLan {
 
       if(par2 == 28 || par2 == 156) 
       {
-         super.actionPerformed((GuiButton)this.buttonList.get(0));
+         this.actionPerformed((GuiButton)this.buttonList.get(0));
       }
       
       ((GuiButton)this.buttonList.get(0)).enabled = port >= 10000 && port <= '\uffff';
@@ -76,7 +80,7 @@ public class GuiNet extends GuiShareToLan {
 	   if(button.id == 101)
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
-           boolean opened = PortMappings.openLan(this.port,GameType.getByName(getGameMode()), getCheats());
+           boolean opened = PortMappings.openLan(this.port, GameType.getByName(getGameMode()), getCheats());
            IChatComponent itextcomponent = opened ? new ChatComponentTranslation("commands.publish.started", new Object[] {"" + this.port}) : new ChatComponentText("commands.publish.failed");
            this.mc.ingameGUI.getChatGUI().printChatMessage(itextcomponent);
            if(ConfigPortforward.openToInternet)
