@@ -2,13 +2,13 @@ package com.jredfox.upnp;
 
 import com.jredfox.upnp.proxy.ServerProxy;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 @Mod(modid = PortForwardMod.MODID, version = PortForwardMod.VERSION, name = PortForwardMod.NAME)
 public class PortForwardMod
@@ -36,7 +36,7 @@ public class PortForwardMod
     public void serverStarting(FMLServerStartingEvent event)
     {
     	if(ConfigPortforward.openToInternet)
-    		proxy.serverStarting();
+    		proxy.serverStarting(event.getServer());
     }
     
     @EventHandler

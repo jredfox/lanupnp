@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dosse.upnp.UPnP;
+import com.mojang.realmsclient.gui.ChatFormatting;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ThreadLanServerPing;
 import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.HttpUtil;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.GameType;
 import net.minecraftforge.common.MinecraftForge;
 
 public class PortMappings {
@@ -59,7 +59,7 @@ public class PortMappings {
 		   long time = System.currentTimeMillis();
 		   boolean opened = addMapping(port);
 		   if(Minecraft.getMinecraft().ingameGUI != null)
-			   Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage((IChatComponent)new ChatComponentText( (opened ? EnumChatFormatting.AQUA : EnumChatFormatting.RED) + (opened ? "port opened" : "port failed to open")));
+			   Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage((ITextComponent)new TextComponentString( (opened ? ChatFormatting.AQUA : ChatFormatting.RED) + (opened ? "port opened" : "port failed to open")));
 		 }
 		});
 		
@@ -69,18 +69,20 @@ public class PortMappings {
     /**
      * On dedicated does nothing. On integrated, sets commandsAllowedForAll, gameType and allows external connections.
      */
-    public static boolean openLan(int port, WorldSettings.GameType type, boolean allowCheats)
+    public static boolean openLan(int port, GameType type, boolean allowCheats)
     {
         try
         {
-        	IntegratedServer server = Minecraft.getMinecraft().getIntegratedServer();
-            server.func_147137_ag().addLanEndpoint((InetAddress)null, port);
-            server.logger.info("Started on " + port);
-            server.isPublic = true;
-            server.lanServerPing = new ThreadLanServerPing(server.getMOTD(), port + "");
-            server.lanServerPing.start();
-            server.getConfigurationManager().func_152604_a(type);
-            server.getConfigurationManager().setCommandsAllowedForAll(allowCheats);
+        	Minecraft mc = Minecraft.getMinecraft();
+        	IntegratedServer server = mc.getIntegratedServer();
+        	server.getNetworkSystem().addLanEndpoint((InetAddress)null, port);
+        	server.LOGGER.info("Started on {}", (int)port);
+        	server.isPublic = true;
+        	server.lanServerPing = new ThreadLanServerPing(server.getMOTD(), port + "");
+        	server.lanServerPing.start();
+        	server.getPlayerList().setGameType(type);
+        	server.getPlayerList().setCommandsAllowedForAll(allowCheats);
+        	mc.player.setPermissionLevel(allowCheats ? 4 : mc.player.getPermissionLevel());
             return true;
         }
         catch (IOException ioexception1)
@@ -95,7 +97,7 @@ public class PortMappings {
 
         try
         {
-            port = HttpUtil.func_76181_a();
+            port = HttpUtil.getSuitableLanPort();
         }
         catch (IOException ioexception)
         {

@@ -6,10 +6,10 @@ import com.jredfox.upnp.PortMappings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.GameType;
 
 public class GuiLan extends GuiScreen
 {
@@ -84,18 +84,18 @@ public class GuiLan extends GuiScreen
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             int port = PortMappings.getRndPort();
-            boolean openLan = PortMappings.openLan(port, WorldSettings.GameType.getByName(this.gameType), this.allowCheats);
-            IChatComponent object;
+            boolean openLan = PortMappings.openLan(port, GameType.getByName(this.gameType), this.allowCheats);
+            ITextComponent object;
             if (openLan)
             {
-                object = new ChatComponentTranslation("commands.publish.started", new Object[] {"" + port});
+                object = new TextComponentTranslation("commands.publish.started", new Object[] {"" + port});
             }
             else
             {
-                object = new ChatComponentText("commands.publish.failed");
+                object = new TextComponentString("commands.publish.failed");
             }
 
-            this.mc.ingameGUI.getChatGUI().printChatMessage((IChatComponent)object);
+            this.mc.ingameGUI.getChatGUI().printChatMessage((ITextComponent)object);
             
             if(ConfigPortforward.openToInternet)
             {
@@ -110,8 +110,8 @@ public class GuiLan extends GuiScreen
     public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
     {
         this.drawDefaultBackground();
-        this.drawCenteredString(this.fontRendererObj, I18n.format("lanServer.title", new Object[0]), this.width / 2, 50, 16777215);
-        this.drawCenteredString(this.fontRendererObj, I18n.format("lanServer.otherPlayers", new Object[0]), this.width / 2, 82, 16777215);
+        this.drawCenteredString(this.fontRenderer, I18n.format("lanServer.title", new Object[0]), this.width / 2, 50, 16777215);
+        this.drawCenteredString(this.fontRenderer, I18n.format("lanServer.otherPlayers", new Object[0]), this.width / 2, 82, 16777215);
         super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
     }
 }
