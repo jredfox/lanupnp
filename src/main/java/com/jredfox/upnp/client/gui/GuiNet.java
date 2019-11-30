@@ -32,10 +32,11 @@ public class GuiNet extends GuiShareToLan {
    {
       super.initGui();
       this.txtPort = new GuiTextField(this.fontRendererObj, this.width / 2 - 155, 150, 150, 20);
-      this.txtPort.setFocused(true);
-      this.txtPort.setText("25565");
+      this.txtPort.setEnabled(!ConfigPortforward.randomPorts);
+      this.txtPort.setFocused(!ConfigPortforward.randomPorts);
+      this.txtPort.setText(!ConfigPortforward.randomPorts ? "25565" : "RND");
       this.buttonList.add(new GuiButton(105, this.width / 2 + 5, 150, 150, 20, this.openToNet ? "Open To Net" : "Open To Lan"));
-      port = 25565;
+      port = !ConfigPortforward.randomPorts ? 25565 : PortMappings.getRndPort();
    }
    
    @Override

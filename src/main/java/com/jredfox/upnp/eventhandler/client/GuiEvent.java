@@ -1,7 +1,5 @@
 package com.jredfox.upnp.eventhandler.client;
 
-import com.jredfox.upnp.ConfigPortforward;
-import com.jredfox.upnp.client.gui.GuiLan;
 import com.jredfox.upnp.client.gui.GuiNet;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -18,7 +16,7 @@ public class GuiEvent {
 		GuiScreen gui = event.gui;
 		if(gui instanceof GuiShareToLan)
 		{
-			event.gui = ConfigPortforward.randomPorts ? new GuiLan(Minecraft.getMinecraft().currentScreen) : new GuiNet(Minecraft.getMinecraft().currentScreen);
+			event.gui = new GuiNet(Minecraft.getMinecraft().currentScreen);
 		}
 	}
 
