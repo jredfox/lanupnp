@@ -24,9 +24,14 @@ public class ClientProxy extends ServerProxy{
 	}
 	
 	@Override
-	public void init()
+	public void preinit()
 	{
 		this.isClient = true;
+	}
+	
+	@Override
+	public void init()
+	{
 	  	MinecraftForge.EVENT_BUS.register(new GuiEvent());
 	}
 	

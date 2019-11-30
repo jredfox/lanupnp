@@ -1,0 +1,3 @@
+lan.upnp.open=Lan Opened on
+lan.upnp.closed=Lan Failed to open on
+commands.closelan.name=Closed Lang...

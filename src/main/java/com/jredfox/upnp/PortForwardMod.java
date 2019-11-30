@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.dosse.upnp.UPnP;
 import com.jredfox.upnp.command.CmdCloseLan;
 import com.jredfox.upnp.proxy.ServerProxy;
 
@@ -19,8 +20,8 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.server.MinecraftServer;
 
-@Mod(modid = PortForwardMod.MODID, version = PortForwardMod.VERSION, name = PortForwardMod.NAME)
-public class PortForwardMod
+@Mod(modid = PortforwardMod.MODID, version = PortforwardMod.VERSION, name = PortforwardMod.NAME, acceptableRemoteVersions = "*")
+public class PortforwardMod
 {
     public static final String MODID = "lanupnp";
     public static final String NAME = "Lan UPNP";
@@ -33,6 +34,11 @@ public class PortForwardMod
     public void preinit(FMLPreInitializationEvent event)
     {
     	ConfigPortforward.load(event);
+    	proxy.preinit();
+    	if(proxy.isClient && ConfigPortforward.openToInternet)
+    	{
+    		PortMappings.initUPNP();
+    	}
     }
     
     @EventHandler
@@ -47,9 +53,11 @@ public class PortForwardMod
     	if(ConfigPortforward.openToInternet)
     		proxy.serverStarting();
     	
-    	removePublish(event.getServer());
     	if(proxy.isClient)
+    	{
+    	 	removePublish(event.getServer());
     		event.registerServerCommand(new CmdCloseLan());
+    	}
     }
     
     @EventHandler

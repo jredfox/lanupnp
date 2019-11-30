@@ -71,6 +71,24 @@ public class PortMappings {
 		thread.start();
 	}
 	
+	/**
+	 * initialize the network gateway data for UPNP program to run faster when opening to net
+	 */
+	public static void initUPNP()
+	{
+		Thread thread = new Thread(
+		new Runnable() 
+		{ 
+			@Override
+			public void run() 
+			{ 
+				UPnP.waitInit();//force it to cache the gateway on load time
+				System.out.println("Finished UPNP init");
+			}
+		});
+		thread.start();
+	}
+	
     /**
      * On dedicated does nothing. On integrated, sets commandsAllowedForAll, gameType and allows external connections.
      */
@@ -124,11 +142,11 @@ public class PortMappings {
                 server.lanServerPing.interrupt();
                 server.lanServerPing = null;
             }
-        	if(server.func_147137_ag() != null)
-        	{
-        		server.func_147137_ag().terminateEndpoints();
-        	}
         }
+    	if(server.func_147137_ag() != null)
+    	{
+    		server.func_147137_ag().terminateEndpoints();
+    	}
         server.isPublic = false;
 	}
 	
@@ -161,12 +179,26 @@ public class PortMappings {
 	/**
 	 * dynamically get your current public ip adress I recommend cacheing it somewhere so it doesn't go throw a huge process each time
 	 */
-	public static String getPublicIp() throws IOException 
+	public static String publicIp = "";
+	public static String getPublicIp() 
 	{
-		URL whatismyip = new URL("http://checkip.amazonaws.com");
-		BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
-		String ip = in.readLine(); //you get the IP as a String
-		return ip.trim();
+		if(!publicIp.isEmpty())
+		{
+			return publicIp;
+		}
+		try
+		{
+			URL whatismyip = new URL("http://checkip.amazonaws.com");
+			BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+			String ip = in.readLine(); //you get the IP as a String
+			publicIp = ip.trim();
+			return publicIp;
+		}
+		catch(Exception e)
+		{
+			System.out.println("Unable to retrieve public ip adress from:" + "http://checkip.amazonaws.com");
+		}
+		return "";
 	}
 
 }

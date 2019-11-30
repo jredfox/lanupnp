@@ -3,12 +3,15 @@ package com.jredfox.upnp.client.gui;
 import java.io.IOException;
 
 import com.jredfox.upnp.ConfigPortforward;
+import com.jredfox.upnp.PortforwardMod;
 import com.jredfox.upnp.PortMappings;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiShareToLan;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
@@ -17,6 +20,7 @@ import net.minecraft.world.WorldSettings.GameType;
 public class GuiNet extends GuiShareToLan {
    public GuiTextField txtPort;
    public int port;
+   public boolean openToNet = ConfigPortforward.openToInternet;
 
    public GuiNet(GuiScreen parent) 
    {
@@ -30,6 +34,7 @@ public class GuiNet extends GuiShareToLan {
       this.txtPort = new GuiTextField(this.fontRendererObj, this.width / 2 - 155, 150, 150, 20);
       this.txtPort.setFocused(true);
       this.txtPort.setText("25565");
+      this.buttonList.add(new GuiButton(105, this.width / 2 + 5, 150, 150, 20, this.openToNet ? "Open To Net" : "Open To Lan"));
       port = 25565;
    }
    
@@ -72,6 +77,7 @@ public class GuiNet extends GuiShareToLan {
       }
       
       ((GuiButton)this.buttonList.get(0)).enabled = port >= 10000 && port <= '\uffff';
+      super.keyTyped(par1, par2);
    }
    
    @Override
@@ -81,12 +87,17 @@ public class GuiNet extends GuiShareToLan {
 	   {
            this.mc.displayGuiScreen((GuiScreen)null);
            boolean opened = PortMappings.openLan(this.port, GameType.getByName(getGameMode()), getCheats());
-           IChatComponent itextcomponent = opened ? new ChatComponentTranslation("commands.publish.started", new Object[] {"" + this.port}) : new ChatComponentText("commands.publish.failed");
+           IChatComponent itextcomponent = opened ? new ChatComponentTranslation("lan.upnp.open", new Object[] {PortMappings.getPublicIp() + ":" + this.port}) : new ChatComponentTranslation("lan.upnp.closed", new Object[]{"" + this.port});
            this.mc.ingameGUI.getChatGUI().printChatMessage(itextcomponent);
-           if(ConfigPortforward.openToInternet)
+           if(opened && this.openToNet)
            {
         	   PortMappings.addScheduledMapping(this.port);
            }
+	   }
+	   else if(button.id == 105)
+	   {
+		   this.openToNet = !this.openToNet;
+		   button.displayString = this.openToNet ? "Open To Net" : "Open To Lan";
 	   }
 	   else
 	   {

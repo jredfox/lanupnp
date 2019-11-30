@@ -12,13 +12,19 @@ public class ServerProxy {
 	public void serverStarting()
 	{
     	int port = DedicatedServer.getServer().getPort();
-    	System.out.println("opened:" + PortMappings.addMapping(port) + "\t port:" + port);
+    	boolean opened = PortMappings.addMapping(port);
+    	System.out.println((opened ? "opened" : "failed to open") + " port on:" + PortMappings.getPublicIp() + ":" + port);
 	}
 
 	public void serverStopping()
 	{
     	int port = DedicatedServer.getServer().getPort();
     	System.out.println("closed:" + PortMappings.removeMapping(port) + "\t port:" + port);
+	}
+	
+	public void preinit()
+	{
+		
 	}
 
 	public void init() 
