@@ -2,11 +2,13 @@ package com.jredfox.upnp.proxy;
 
 import com.jredfox.upnp.PortMappings;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 
 public class ServerProxy {
 	
-	
+	public boolean isClient;
+
 	public void serverStarting()
 	{
     	int port = DedicatedServer.getServer().getPort();
@@ -23,4 +25,10 @@ public class ServerProxy {
 	{
 		
 	}
+
+	public MinecraftServer getServer() 
+	{
+		return DedicatedServer.getServer();
+	}
+	
 }
