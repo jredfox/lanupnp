@@ -85,7 +85,7 @@ public class GuiLan extends GuiScreen
             this.mc.displayGuiScreen((GuiScreen)null);
             int port = PortMappings.getRndPort();
             boolean openToLan = PortMappings.openLan(port, WorldSettings.GameType.getByName(this.gameType), this.allowCheats);
-            IChatComponent itextcomponent = openToLan ? new ChatComponentTranslation("lan.open", new Object[] {PortMappings.getPublicIp() + ":" + port}) : new ChatComponentTranslation("lan.closed", new Object[]{"" + port});
+            IChatComponent itextcomponent = openToLan ? new ChatComponentTranslation("commands.publish.started", new Object[] {PortMappings.getPublicIp() + ":" + port}) : new ChatComponentTranslation("commands.publish.failed", new Object[]{"" + port});
      	    this.mc.ingameGUI.getChatGUI().printChatMessage(itextcomponent);
             
             if(openToLan && ConfigPortforward.openToInternet)
