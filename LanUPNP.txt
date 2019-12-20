@@ -1,0 +1,5 @@
+1.5.2:
+make a coremod to have the gui replace event then replace the lan mod
+
+1.6.4:
+port it
